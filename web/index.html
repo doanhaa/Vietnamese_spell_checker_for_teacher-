@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VN Lesson Checker Pro v2.0 — Kiểm tra & Chuẩn hóa Giáo án (CV 5512 & NĐ 30/2020)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #f4f7fb;
+      --bg-surface: #ffffff;
+      --bg-subtle: #edf2f9;
+      --bg-glass: rgba(255, 255, 255, 0.86);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-soft: rgba(37, 99, 235, 0.1);
+      --success: #059669;
+      --success-soft: rgba(5, 150, 105, 0.12);
+      --warning: #d97706;
+      --warning-soft: rgba(217, 119, 6, 0.12);
+      --danger: #dc2626;
+      --danger-soft: rgba(220, 38, 38, 0.12);
+      --purple: #7c3aed;
+      --purple-soft: rgba(124, 58, 237, 0.12);
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.07);
+      --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.1);
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 22px;
+    }
+
+    [data-theme="dark"] {
+      --bg-main: #0b1120;
+      --bg-surface: #131c31;
+      --bg-subtle: #1e293b;
+      --bg-glass: rgba(19, 28, 49, 0.86);
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #26354d;
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --accent-soft: rgba(59, 130, 246, 0.16);
+      --success: #10b981;
+      --success-soft: rgba(16, 185, 129, 0.18);
+      --warning: #f59e0b;
+      --warning-soft: rgba(245, 158, 11, 0.18);
+      --danger: #ef4444;
+      --danger-soft: rgba(239, 68, 68, 0.2);
+      --purple: #a78bfa;
+      --purple-soft: rgba(167, 139, 250, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    /* Navbar */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-glass);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.85rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.35rem;
+      font-weight: 800;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .btn-icon {
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      padding: 0.45rem 0.85rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.82rem;
+      transition: all 0.15s;
+    }
+    .btn-icon:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Main Layout */
+    .layout {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem 3rem;
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+    }
+
+    /* Sidebar Settings */
+    .sidebar {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.35rem;
+      box-shadow: var(--shadow-sm);
+      height: fit-content;
+      position: sticky;
+      top: 84px;
+    }
+
+    .sidebar-section {
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.15rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .sidebar-section:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .sidebar-heading {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      margin-bottom: 0.65rem;
+      cursor: pointer;
+      font-size: 0.88rem;
+      color: var(--text-primary);
+    }
+    .check-row input[type="checkbox"] {
+      margin-top: 0.22rem;
+      accent-color: var(--accent);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    .check-desc {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.1rem;
+    }
+
+    .form-group {
+      margin-bottom: 0.75rem;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.3rem;
+    }
+    .form-select, .form-input, .form-textarea {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border-radius: 9px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.85rem;
+      transition: border-color 0.15s;
+    }
+    .form-select:focus, .form-input:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--bg-surface);
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: var(--bg-surface);
+      padding: 0.4rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-color);
+      margin-bottom: 1.25rem;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      flex: 1;
+      min-width: max-content;
+      padding: 0.7rem 1.1rem;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 11px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background: var(--bg-subtle);
+    }
+    .tab-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+    }
+
+    .tab-panel {
+      display: none;
+    }
+    .tab-panel.active {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards & Upload Zone */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.25rem;
+    }
+
+    .upload-zone {
+      border: 2px dashed var(--accent);
+      background: var(--accent-soft);
+      border-radius: var(--radius-lg);
+      padding: 2.2rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      background: rgba(37, 99, 235, 0.16);
+      transform: translateY(-2px);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    }
+    .btn-primary:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+    .btn-success {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+    }
+    .btn-danger {
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
+    }
+    .btn-outline {
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Metric Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      gap: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .metric-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      text-align: center;
+    }
+    .metric-val {
+      font-size: 1.85rem;
+      font-weight: 800;
+      line-height: 1.15;
+    }
+    .metric-lbl {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+      font-weight: 600;
+    }
+
+    /* Highlighted Inline Diff */
+    .ctx-text {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    .err-inline {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1.5px solid #ef4444;
+      font-weight: 800;
+      padding: 0.1rem 0.45rem;
+      border-radius: 5px;
+      margin: 0 0.12rem;
+      display: inline-block;
+    }
+    .sug-inline {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1.5px solid #10b981;
+      font-weight: 800;
+      padding: 0.1rem 0.5rem;
+      border-radius: 5px;
+      margin: 0 0.18rem;
+      display: inline-block;
+      font-size: 0.88em;
+    }
+    [data-theme="dark"] .err-inline {
+      background: rgba(239, 68, 68, 0.25);
+      color: #fecaca;
+      border-color: #f87171;
+    }
+    [data-theme="dark"] .sug-inline {
+      background: rgba(16, 185, 129, 0.25);
+      color: #a7f3d0;
+      border-color: #34d399;
+    }
+
+    /* Table */
+    .error-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      max-height: 480px;
+      overflow-y: auto;
+    }
+    table.err-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+    }
+    table.err-table th {
+      position: sticky;
+      top: 0;
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      text-align: left;
+      padding: 0.75rem 0.9rem;
+      font-weight: 700;
+      border-bottom: 1px solid var(--border-color);
+      z-index: 2;
+    }
+    table.err-table td {
+      padding: 0.7rem 0.9rem;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: top;
+    }
+    table.err-table tr:hover td {
+      background: var(--accent-soft);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.18rem 0.55rem;
+      border-radius: 6px;
+      font-size: 0.73rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .tag-spelling { background: var(--danger-soft); color: var(--danger); }
+    .tag-punct { background: var(--warning-soft); color: var(--warning); }
+    .tag-online { background: var(--purple-soft); color: var(--purple); }
+    .tag-format { background: var(--accent-soft); color: var(--accent); }
+
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 0.6rem;
+      margin-top: 0.75rem;
+    }
+    .check-item {
+      padding: 0.55rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.83rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 1px solid var(--border-color);
+    }
+    .check-ok { background: var(--success-soft); color: var(--success); border-color: transparent; }
+    .check-fail { background: var(--danger-soft); color: var(--danger); border-color: transparent; }
+
+    .spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-logo">📝</div>
+      <div>
+        <div class="brand-title">Kiểm tra & Chuẩn hóa Giáo án Pro <span class="badge-pill">v2.0 Turbo</span></div>
+        <div class="brand-sub">Chuẩn Công văn 5512/BGDĐT-GDTrH & Nghị định 30/2020/NĐ-CP • Offline + Online AI & Wiktionary</div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn-icon" onclick="loadSampleDocx()" title="Tạo và kiểm tra ngay file Giáo án mẫu có lỗi cố ý">🧪 Dùng thử Giáo án mẫu</button>
+      <button class="btn-icon" onclick="toggleTheme()" id="themeBtn">🌙 Giao diện Tối</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Sidebar Configuration -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-heading">⚙️ Chế độ Kiểm tra Cơ bản</div>
+        <label class="check-row">
+          <input type="checkbox" id="cfg_spelling" checked />
+          <div>
+            <strong>Chính tả & Dấu câu</strong>
+            <span class="check-desc">Từ điển 20.000+ âm tiết, 200+ cặp từ dễ nhầm, lỗi Telex & dấu câu</span>
+          </div>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" id="cfg_context" checked />
+          <div>
+            <strong>Ngữ cảnh Hán-Việt & Lặp từ</strong>
+            <span class="check-desc">Bắt lỗi yếu điểm/điểm yếu, bàng quan/bàng hoàng, giả thiết/giả thuyết...</span>
+          </div>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" id="cfg_format" checked />
+          <div>
+            <strong>Thể thức NĐ 30 & CV 5512</strong>
+            <span class="check-desc">Khổ A4, căn lề, font Times New Roman 13-14pt, đủ 4 hoạt động</span>
+          </div>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" id="cfg_suggestion" checked />
+          <div>
+            <strong>Chèn gợi ý [Sửa: ...]</strong>
+            <span class="check-desc">Hiển thị từ gợi ý màu xanh ngay cạnh từ sai trên file Word</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-heading">🌐 Giải pháp Độ Chính Xác Cao (Online)</div>
+        <label class="check-row">
+          <input type="checkbox" id="cfg_wiktionary" checked />
+          <div>
+            <strong>Xác thực Wiktionary / Wikipedia</strong>
+            <span class="check-desc">Kiểm tra từ hiếm, tên riêng, thuật ngữ trực tuyến để chống bắt nhầm</span>
+          </div>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" id="cfg_languagetool" />
+          <div>
+            <strong>LanguageTool Cloud API</strong>
+            <span class="check-desc">Kiểm tra ngữ pháp nâng cao & đoạn tiếng Anh song ngữ</span>
+          </div>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" id="cfg_ai" />
+          <div>
+            <strong>AI Ngữ cảnh Chuyên sâu</strong>
+            <span class="check-desc">Dùng LLM rà soát từ đồng âm khác nghĩa & lỗi diễn đạt câu</span>
+          </div>
+        </label>
+
+        <div class="form-group" style="margin-top: 0.6rem;">
+          <label class="form-label">Nhà cung cấp Cloud AI</label>
+          <select class="form-select" id="cfg_ai_provider">
+            <option value="free_cloud">⚡ Free Cloud AI (Không cần Key)</option>
+            <option value="gemini">✨ Google Gemini API</option>
+            <option value="openai">🤖 OpenAI API (GPT-4o-mini)</option>
+            <option value="groq">🚀 Groq Cloud (Llama-3.3-70B)</option>
+            <option value="deepseek">🧠 DeepSeek API</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">API Key (Tùy chọn cho Gemini/OpenAI/Groq)</label>
+          <input type="password" class="form-input" id="cfg_ai_key" placeholder="Nhập API Key nếu dùng Gemini/OpenAI..." />
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-heading">🔄 Chuẩn hóa Đồng bộ Chính tả</div>
+        <div class="form-group">
+          <label class="form-label">Quy tắc đặt dấu thanh (oa, oe, uy)</label>
+          <select class="form-select" id="cfg_norm_tone">
+            <option value="keep">Giữ nguyên theo bản gốc</option>
+            <option value="new">Chuẩn mới Bộ GD&ĐT (oà, oá, uỳ, uý)</option>
+            <option value="old">Chuẩn truyền thống (òa, óa, ùy, úy)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Đồng bộ chữ i / y (kĩ/kỹ, lí/lý)</label>
+          <select class="form-select" id="cfg_norm_iy">
+            <option value="keep">Giữ nguyên theo bản gốc</option>
+            <option value="i">Chuẩn SGK hiện hành (kĩ năng, vật lí, mĩ thuật)</option>
+            <option value="y">Chuẩn chữ y dài (kỹ năng, vật lý, mỹ thuật)</option>
+          </select>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main>
+      <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('tab-docx', this)">📂 1. Kiểm tra File Giáo án (.docx)</button>
+        <button class="tab-btn" onclick="switchTab('tab-live', this)">✍️ 2. Kiểm tra Văn bản Trực tiếp</button>
+        <button class="tab-btn" onclick="switchTab('tab-online', this)">🌐 3. Tra cứu Từ điển & Thẩm định AI</button>
+        <button class="tab-btn" onclick="switchTab('tab-dict', this)">⚙️ 4. Từ điển Cá nhân & Quy tắc</button>
+      </div>
+
+      <!-- TAB 1: DOCX CHECKER -->
+      <section id="tab-docx" class="tab-panel active">
+        <div class="card">
+          <div class="upload-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+            <input type="file" id="fileInput" accept=".docx" multiple style="display:none" onchange="handleFilesSelected(this.files)" />
+            <div style="font-size: 2.8rem; margin-bottom: 0.5rem;">📄</div>
+            <h3 style="font-size: 1.15rem; margin-bottom: 0.3rem;">Kéo thả file Giáo án (.docx) vào đây hoặc nhấn để chọn file</h3>
+            <p style="color: var(--text-muted); font-size: 0.86rem;">Hỗ trợ tải lên nhiều file cùng lúc • Xử lý siêu tốc trực tiếp trên RAM • Xuất cả bản Bôi Đỏ và bản Tự Động Sửa Sạch Lỗi</p>
+            <div style="margin-top: 1rem; display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;" onclick="event.stopPropagation()">
+              <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">📂 Chọn file .docx từ máy</button>
+              <button class="btn btn-outline" onclick="loadSampleDocx()">🧪 Chạy thử ngay với Giáo án mẫu</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="docxResultsContainer"></div>
+      </section>
+
+      <!-- TAB 2: LIVE TEXT PROOFREADER -->
+      <section id="tab-live" class="tab-panel">
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <h3 style="font-size: 1.1rem;">✍️ Trình Kiểm tra & Chuẩn hóa Văn bản Tức thì</h3>
+              <p style="font-size: 0.83rem; color: var(--text-muted);">Dán đoạn nội dung giáo án để kiểm tra chính tả, dấu câu, ngữ cảnh Hán-Việt và tự động sửa lỗi với 1 cú nhấp chuột.</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button class="btn btn-outline" onclick="fillSampleLiveText()">📋 Chèn đoạn văn mẫu có lỗi</button>
+              <button class="btn btn-primary" onclick="runLiveTextCheck()" id="btnLiveCheck">🔍 Kiểm tra & Chuẩn hóa ngay</button>
+            </div>
+          </div>
+
+          <textarea id="liveTextInput" class="form-textarea" rows="6" placeholder="Nhập hoặc dán đoạn văn bản giáo án cần kiểm tra vào đây..."></textarea>
+
+          <div id="liveResultArea" style="margin-top: 1.25rem; display: none;"></div>
+        </div>
+      </section>
+
+      <!-- TAB 3: ONLINE DICTIONARY & AI PEDAGOGY REVIEW -->
+      <section id="tab-online" class="tab-panel">
+        <div class="card">
+          <h3 style="font-size: 1.1rem; margin-bottom: 0.35rem;">📖 Tra cứu Từ điển Chính tả Trực tuyến (Wiktionary + Wikipedia + Cặp từ dễ nhầm)</h3>
+          <p style="font-size: 0.83rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Tra cứu nhanh một từ hoặc cụm từ để biết cách viết chuẩn xác nhất, phân biệt cặp từ dễ nhầm (vd: <em>chỉn chu, xán lạn, súc tích, tham quan, yếu điểm, bàng quan, vô hình trung</em>).
+          </p>
+          <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+            <input type="text" id="dictQueryInput" class="form-input" style="flex: 1; min-width: 240px;" placeholder="Nhập từ hoặc cụm từ cần tra cứu (vd: chỉn chu, súc tích, thăm quan, yếu điểm)..." onkeydown="if(event.key==='Enter') runWordLookup()" />
+            <button class="btn btn-primary" onclick="runWordLookup()">🌐 Tra cứu Chính tả</button>
+          </div>
+          <div style="margin-top: 0.65rem; display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center;">
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Tra nhanh:</span>
+            <button class="btn-icon" onclick="quickLookup('chỉnh chu')">chỉnh chu vs chỉn chu</button>
+            <button class="btn-icon" onclick="quickLookup('xúc tích')">xúc tích vs súc tích</button>
+            <button class="btn-icon" onclick="quickLookup('thăm quan')">thăm quan vs tham quan</button>
+            <button class="btn-icon" onclick="quickLookup('sáng lạng')">sáng lạng vs xán lạn</button>
+            <button class="btn-icon" onclick="quickLookup('vô hình chung')">vô hình chung</button>
+            <button class="btn-icon" onclick="quickLookup('chín mùi')">chín mùi vs chín muồi</button>
+          </div>
+          <div id="wordLookupResult" style="margin-top: 1.1rem;"></div>
+        </div>
+
+        <div class="card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+              <h3 style="font-size: 1.1rem;">🤖 Thẩm định Chuyên môn Giáo án theo Công văn 5512 (AI Reviewer)</h3>
+              <p style="font-size: 0.83rem; color: var(--text-muted);">Đánh giá cách viết Mục tiêu (phẩm chất, năng lực), chuỗi 4 hoạt động dạy học và gợi ý nâng cấp sư phạm.</p>
+            </div>
+            <button class="btn btn-primary" onclick="runPedagogyReview()" id="btnAiReview">✨ Phân tích Sư phạm CV 5512</button>
+          </div>
+          <textarea id="aiReviewInput" class="form-textarea" rows="5" placeholder="Dán nội dung Kế hoạch bài dạy (Mục tiêu, Tiến trình dạy học...) vào đây để AI thẩm định theo chuẩn Công văn 5512..."></textarea>
+          <div id="aiReviewResult" style="margin-top: 1rem;"></div>
+        </div>
+      </section>
+
+      <!-- TAB 4: CUSTOM WHITELIST & CONFUSABLE RULES -->
+      <section id="tab-dict" class="tab-panel">
+        <div class="card">
+          <h3 style="font-size: 1.1rem; margin-bottom: 0.35rem;">🛡️ Quản lý Từ điển Cá nhân (Custom Whitelist)</h3>
+          <p style="font-size: 0.83rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Thêm các tên riêng địa phương, tên trường, thuật ngữ chuyên ngành hoặc từ viết tắt riêng để phần mềm không bao giờ báo lỗi nhầm.
+          </p>
+          <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1rem;">
+            <input type="text" id="newCustomWords" class="form-input" style="flex: 1;" placeholder="Nhập từ cần thêm (cách nhau bởi dấu phẩy, vd: Pác Bó, Côn Sơn, GeoGebra)..." onkeydown="if(event.key==='Enter') addCustomWordsUI()" />
+            <button class="btn btn-success" onclick="addCustomWordsUI()">➕ Thêm vào Từ điển Cá nhân</button>
+          </div>
+          <div id="customWordsList" style="display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
+        </div>
+
+        <div class="card">
+          <h3 style="font-size: 1.1rem; margin-bottom: 0.35rem;">📚 Cẩm nang 200+ Cặp từ hay nhầm lẫn trong Giáo án & Văn bản Nhà trường</h3>
+          <input type="text" id="filterConfusables" class="form-input" style="margin: 0.65rem 0 1rem;" placeholder="🔍 Tìm nhanh cặp từ (vd: xử lý, năng suất, dành, kĩ năng)..." oninput="renderConfusablesTable(this.value)" />
+          <div class="error-table-wrap" id="confusablesTableContainer"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    let CONFUSABLES_CACHE = [];
+
+    function toggleTheme() {
+      const htmlEl = document.documentElement;
+      const next = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      htmlEl.setAttribute('data-theme', next);
+      document.getElementById('themeBtn').textContent = next === 'dark' ? '☀️ Giao diện Sáng' : '🌙 Giao diện Tối';
+    }
+
+    function switchTab(tabId, btnEl) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      if (btnEl) btnEl.classList.add('active');
+    }
+
+    function getCheckConfig() {
+      return {
+        check_spelling: document.getElementById('cfg_spelling').checked,
+        check_context: document.getElementById('cfg_context').checked,
+        check_format: document.getElementById('cfg_format').checked,
+        show_suggestion: document.getElementById('cfg_suggestion').checked,
+        online_verify_wiktionary: document.getElementById('cfg_wiktionary').checked,
+        online_languagetool: document.getElementById('cfg_languagetool').checked,
+        online_ai_check: document.getElementById('cfg_ai').checked,
+        ai_provider: document.getElementById('cfg_ai_provider').value,
+        ai_api_key: document.getElementById('cfg_ai_key').value,
+        normalize_tone: document.getElementById('cfg_norm_tone').value,
+        normalize_iy: document.getElementById('cfg_norm_iy').value,
+      };
+    }
+
+    // Drag & Drop handlers
+    const dropZone = document.getElementById('dropZone');
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length) handleFilesSelected(e.dataTransfer.files);
+    });
+
+    async function handleFilesSelected(fileList) {
+      const container = document.getElementById('docxResultsContainer');
+      container.innerHTML = `<div class="card" style="text-align:center; padding: 2rem;">
+        <div class="spinner" style="border-top-color: var(--accent); border-color: var(--border-color); width:32px; height:32px; margin-bottom:0.8rem;"></div>
+        <h4>Đang phân tích ${fileList.length} file giáo án với Engine v2.0...</h4>
+      </div>`;
+
+      const cfg = getCheckConfig();
+      const resultsHtml = [];
+
+      for (let i = 0; i < fileList.length; i++) {
+        const file = fileList[i];
+        const b64 = await fileToBase64(file);
+        const resp = await fetch('/api/check-docx', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: file.name, content_b64: b64, config: cfg })
+        });
+        const data = await resp.json();
+        resultsHtml.push(renderDocxResultCard(data, i));
+      }
+
+      container.innerHTML = resultsHtml.join('');
+    }
+
+    async function loadSampleDocx() {
+      switchTab('tab-docx', document.querySelectorAll('.tab-btn')[0]);
+      const container = document.getElementById('docxResultsContainer');
+      container.innerHTML = `<div class="card" style="text-align:center; padding: 2rem;">
+        <div class="spinner" style="border-top-color: var(--accent); border-color: var(--border-color); width:32px; height:32px; margin-bottom:0.8rem;"></div>
+        <h4>Đang khởi tạo & kiểm tra Giáo án mẫu (Bài: Tức nước vỡ bờ - Ngữ văn 8)...</h4>
+      </div>`;
+
+      const cfg = getCheckConfig();
+      const resp = await fetch('/api/sample-docx', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ config: cfg })
+      });
+      const data = await resp.json();
+      container.innerHTML = renderDocxResultCard(data, 0);
+    }
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function renderDocxResultCard(data, idx) {
+      if (!data.success) {
+        return `<div class="card"><h4 style="color:var(--danger)">❌ Lỗi xử lý ${data.filename}: ${data.error}</h4></div>`;
+      }
+      const st = data.stats;
+      const scoreColor = st.quality_score >= 85 ? 'var(--success)' : (st.quality_score >= 65 ? 'var(--warning)' : 'var(--danger)');
+
+      let verifiedBadge = '';
+      if (st.verified_online_words && st.verified_online_words.length > 0) {
+        verifiedBadge = `<div style="margin-bottom: 1rem; padding: 0.65rem 1rem; border-radius: 10px; background: var(--purple-soft); color: var(--purple); font-size: 0.84rem;">
+          🌐 <strong>Đã xác thực trực tuyến qua Wiktionary/Wikipedia (${st.verified_online_words.length} từ):</strong> ${st.verified_online_words.join(', ')} (đã tự động loại trừ khỏi danh sách báo lỗi nhầm).
+        </div>`;
+      }
+
+      // Format errors & CV5512 checklist
+      let formatHtml = '';
+      if (st.format_errors && st.format_errors.length > 0) {
+        const items = st.format_errors.map(fe => `<li style="margin-bottom:0.35rem;"><strong>[${fe.error_type}]</strong> ${fe.message} ${fe.detail ? `<span style="color:var(--text-muted)">(${fe.detail})</span>` : ''}</li>`).join('');
+        formatHtml = `<div style="margin-bottom:1.1rem; padding: 1rem; border-radius: 10px; background: var(--warning-soft); border-left: 4px solid var(--warning);">
+          <h4 style="font-size: 0.92rem; color: var(--warning); margin-bottom: 0.4rem;">📐 Cảnh báo Thể thức (NĐ 30/2020) & Đề mục (CV 5512)</h4>
+          <ul style="padding-left: 1.2rem; font-size: 0.85rem;">${items}</ul>
+        </div>`;
+      }
+
+      let checklistHtml = '';
+      if (st.section_checklist && st.section_checklist.length > 0) {
+        const boxes = st.section_checklist.map(c => `
+          <div class="check-item ${c.found ? 'check-ok' : 'check-fail'}">
+            <span>${c.found ? '✅' : '❌'}</span>
+            <span>${c.label}</span>
+          </div>
+        `).join('');
+        checklistHtml = `<details style="margin-bottom: 1.1rem;">
+          <summary style="cursor:pointer; font-weight:700; font-size:0.9rem; color:var(--text-secondary);">📋 Xem Checklist Cấu trúc Giáo án chuẩn Công văn 5512 (${st.section_checklist.filter(x=>x.found).length}/${st.section_checklist.length} mục đạt)</summary>
+          <div class="checklist-grid">${boxes}</div>
+        </details>`;
+      }
+
+      // Error details table
+      let tableHtml = '';
+      if (st.error_details && st.error_details.length > 0) {
+        const rows = st.error_details.map(e => {
+          const tagCls = e.error_type.includes('chính tả') ? 'tag-spelling' : (e.error_type.includes('dấu câu') ? 'tag-punct' : 'tag-online');
+          return `<tr>
+            <td><strong>#${e.id}</strong></td>
+            <td style="white-space:nowrap; font-size:0.8rem; color:var(--text-muted);">${e.location}</td>
+            <td><span class="tag ${tagCls}">${e.error_type}</span></td>
+            <td><span class="err-inline">${escapeHtml(formatVisibleToken(e.wrong_text))}</span></td>
+            <td>${e.suggestion ? `<span class="sug-inline">➜ ${escapeHtml(formatVisibleToken(e.suggestion))}</span>` : '<span style="color:var(--text-muted)">—</span>'}</td>
+            <td style="font-size:0.83rem;">${e.context_html}</td>
+            <td style="font-size:0.8rem; color:var(--text-secondary);">${escapeHtml(e.description)}</td>
+          </tr>`;
+        }).join('');
+
+        tableHtml = `
+          <div style="margin-top: 1rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem; flex-wrap:wrap; gap:0.5rem;">
+              <h4 style="font-size:0.98rem;">🔍 Danh sách Chi tiết Lỗi & Ngữ cảnh (${st.error_details.length} vị trí)</h4>
+              <input type="text" class="form-input" style="max-width:260px; padding:0.38rem 0.7rem;" placeholder="Lọc nhanh lỗi..." oninput="filterErrorTable(this, 'errTbl_${idx}')" />
+            </div>
+            <div class="error-table-wrap">
+              <table class="err-table" id="errTbl_${idx}">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Vị trí</th>
+                    <th>Phân loại</th>
+                    <th>Từ / Cụm sai</th>
+                    <th>Gợi ý sửa</th>
+                    <th>Ngữ cảnh trong Giáo án</th>
+                    <th>Giải thích chuyên môn</th>
+                  </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+              </table>
+            </div>
+          </div>`;
+      } else {
+        tableHtml = `<div style="padding:1.2rem; border-radius:10px; background:var(--success-soft); color:var(--success); text-align:center; font-weight:700;">
+          🎉 Tuyệt vời! Không phát hiện lỗi chính tả hay dấu câu nào trong văn bản.
+        </div>`;
+      }
+
+      return `
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem; padding-bottom:1rem; border-bottom:1px solid var(--border-color);">
+            <div>
+              <h3 style="font-size:1.2rem;">📄 ${escapeHtml(data.filename)}</h3>
+              <span style="font-size:0.8rem; color:var(--text-muted);">
+                Đã quét ${st.paragraphs_checked} đoạn văn (${st.total_words} từ) & ${st.tables_checked} bảng biểu trong <strong>${st.processing_time_ms} ms</strong>
+              </span>
+            </div>
+            <div style="display:flex; gap:0.65rem; flex-wrap:wrap;">
+              <a class="btn btn-danger" download="${escapeHtml(data.marked_filename)}" href="data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,${data.marked_b64}">
+                🔴 Tải Bản Word Bôi Đỏ Lỗi
+              </a>
+              <a class="btn btn-success" download="${escapeHtml(data.fixed_filename)}" href="data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,${data.fixed_b64}">
+                🟢 Tải Bản Word Đã Tự Động Sửa Sạch (${st.auto_fixed_count} mục)
+              </a>
+            </div>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <div class="metric-val" style="color:${scoreColor}">${st.quality_score}/100</div>
+              <div class="metric-lbl">Điểm Chất lượng (${st.quality_grade})</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val" style="color:var(--danger)">${st.total_errors}</div>
+              <div class="metric-lbl">Tổng số lỗi</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val" style="color:var(--danger)">${st.total_spelling_errors}</div>
+              <div class="metric-lbl">Lỗi Chính tả / Ngữ cảnh</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val" style="color:var(--warning)">${st.total_punctuation_errors}</div>
+              <div class="metric-lbl">Lỗi Dấu câu / Khoảng trắng</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val" style="color:var(--accent)">${st.total_format_errors + st.total_structure_errors}</div>
+              <div class="metric-lbl">Lỗi Thể thức & CV 5512</div>
+            </div>
+          </div>
+
+          ${verifiedBadge}
+          ${formatHtml}
+          ${checklistHtml}
+          ${tableHtml}
+        </div>
+      `;
+    }
+
+    function filterErrorTable(inputEl, tableId) {
+      const q = inputEl.value.toLowerCase();
+      const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+      rows.forEach(r => {
+        r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none';
+      });
+    }
+
+    // TAB 2: LIVE TEXT CHECKER
+    function fillSampleLiveText() {
+      document.getElementById('liveTextInput').value =
+        "I. MỤC TIÊU:\n" +
+        "- Phát chiển lăng lực tự học ,lăng lực giao tiếp và hợp tác cho học xinh.\n" +
+        "- GV hướng dẫn HS sử lý văn bản  một cách xúc tích, khắc phục những yếu điểm khi thuyết chình.\n" +
+        "- Giáo dục HS không có thái độ bàng hoàng trước nỗi đau của của người khác, biết giữ dìn văn hóa dân tộc và chuẩn bị bài chỉnh chu trước khi đi thăm quan bảo tàng.";
+      runLiveTextCheck();
+    }
+
+    async function runLiveTextCheck() {
+      const text = document.getElementById('liveTextInput').value;
+      if (!text.trim()) return;
+      const btn = document.getElementById('btnLiveCheck');
+      btn.disabled = true;
+      btn.textContent = '⏳ Đang kiểm tra...';
+
+      const cfg = getCheckConfig();
+      const resp = await fetch('/api/check-text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, config: cfg })
+      });
+      const data = await resp.json();
+      btn.disabled = false;
+      btn.textContent = '🔍 Kiểm tra & Chuẩn hóa ngay';
+
+      const area = document.getElementById('liveResultArea');
+      area.style.display = 'block';
+
+      const errRows = (data.errors || []).map((e, i) => `
+        <tr>
+          <td>#${i + 1}</td>
+          <td><span class="tag ${e.error_type.includes('chính tả') ? 'tag-spelling' : 'tag-punct'}">${e.error_type}</span></td>
+          <td><span class="err-inline">${escapeHtml(e.wrong_text)}</span></td>
+          <td><span class="sug-inline">➜ ${escapeHtml(e.suggestion || '?')}</span></td>
+          <td>${escapeHtml(e.description)}</td>
+        </tr>
+      `).join('');
+
+      area.innerHTML = `
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+          <div style="padding: 1rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-subtle);">
+            <div style="font-weight: 700; font-size: 0.88rem; margin-bottom: 0.5rem; color: var(--danger);">
+              🔴 Bản Đánh Dấu Lỗi Trực Quan (${data.errors.length} lỗi • ${data.processing_time_ms} ms)
+            </div>
+            <div style="white-space: pre-wrap; font-size: 0.92rem; line-height: 1.75;">${data.highlighted_html}</div>
+          </div>
+          <div style="padding: 1rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-subtle);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
+              <span style="font-weight: 700; font-size: 0.88rem; color: var(--success);">🟢 Bản Đã Tự Động Sửa Sạch & Chuẩn Hóa</span>
+              <button class="btn-icon" onclick="navigator.clipboard.writeText(document.getElementById('fixedTextOut').innerText); this.textContent='✅ Đã sao chép!';">📋 Sao chép</button>
+            </div>
+            <div id="fixedTextOut" style="white-space: pre-wrap; font-size: 0.92rem; line-height: 1.75;">${escapeHtml(data.fixed_text)}</div>
+          </div>
+        </div>
+        ${data.errors.length > 0 ? `
+          <div class="error-table-wrap">
+            <table class="err-table">
+              <thead><tr><th>#</th><th>Loại lỗi</th><th>Từ sai</th><th>Sửa thành</th><th>Giải thích</th></tr></thead>
+              <tbody>${errRows}</tbody>
+            </table>
+          </div>` : ''}
+      `;
+    }
+
+    // TAB 3: WORD LOOKUP & AI REVIEW
+    function quickLookup(word) {
+      document.getElementById('dictQueryInput').value = word;
+      runWordLookup();
+    }
+
+    async function runWordLookup() {
+      const q = document.getElementById('dictQueryInput').value.trim();
+      if (!q) return;
+      const out = document.getElementById('wordLookupResult');
+      out.innerHTML = `<p style="color:var(--text-muted)">⏳ Đang tra cứu «${escapeHtml(q)}» trên Từ điển Chuẩn & Wiktionary Tiếng Việt...</p>`;
+
+      const resp = await fetch('/api/lookup-word', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: q })
+      });
+      const d = await resp.json();
+
+      const statusBadge = d.is_valid_offline
+        ? `<span class="tag" style="background:var(--success-soft); color:var(--success); font-size:0.85rem;">✅ Đúng chính tả chuẩn tiếng Việt</span>`
+        : `<span class="tag" style="background:var(--danger-soft); color:var(--danger); font-size:0.85rem;">❌ Cách viết chưa chuẩn xác</span>`;
+
+      let relatedHtml = '';
+      if (d.related_confusables && d.related_confusables.length > 0) {
+        relatedHtml = `<div style="margin-top:0.85rem;">
+          <strong style="font-size:0.85rem;">📌 Cặp từ dễ nhầm liên quan:</strong>
+          <ul style="padding-left:1.2rem; margin-top:0.35rem; font-size:0.85rem;">
+            ${d.related_confusables.map(item => `<li><span class="err-inline">${escapeHtml(item[0])}</span> ➔ <span class="sug-inline">${escapeHtml(item[1])}</span> — ${escapeHtml(item[2])}</li>`).join('')}
+          </ul>
+        </div>`;
+      }
+
+      out.innerHTML = `
+        <div style="padding: 1.15rem; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-subtle);">
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.65rem;">
+            <h4 style="font-size:1.1rem;">Từ tra cứu: «${escapeHtml(d.query)}»</h4>
+            ${statusBadge}
+          </div>
+          ${d.recommended_form ? `<p style="margin-bottom:0.4rem;">🎯 <strong>Cách viết khuyến nghị:</strong> <span class="sug-inline" style="font-size:0.95rem;">${escapeHtml(d.recommended_form)}</span></p>` : ''}
+          ${d.explanation ? `<p style="margin-bottom:0.4rem;">💡 <strong>Giải thích:</strong> ${escapeHtml(d.explanation)}</p>` : ''}
+          ${d.iy_variant ? `<p style="margin-bottom:0.4rem; color:var(--accent);">🔄 <strong>Quy chuẩn i/y:</strong> ${escapeHtml(d.iy_variant)}</p>` : ''}
+          ${d.wiktionary_extract ? `<div style="margin-top:0.75rem; padding:0.8rem; border-radius:8px; background:var(--bg-surface); border:1px solid var(--border-color); font-size:0.84rem; white-space:pre-wrap;"><strong>🌐 Trích dẫn Wiktionary Tiếng Việt:</strong>\n${escapeHtml(d.wiktionary_extract)}</div>` : ''}
+          ${d.wikipedia_summary ? `<div style="margin-top:0.75rem; padding:0.8rem; border-radius:8px; background:var(--bg-surface); border:1px solid var(--border-color); font-size:0.84rem;"><strong>🌐 Tóm tắt Wikipedia Tiếng Việt:</strong><br/>${escapeHtml(d.wikipedia_summary)}</div>` : ''}
+          ${relatedHtml}
+        </div>
+      `;
+    }
+
+    async function runPedagogyReview() {
+      let text = document.getElementById('aiReviewInput').value.trim();
+      if (!text) {
+        text = "I. MỤC TIÊU\n1. Kiến thức: HS nêu được nội dung và nghệ thuật của đoạn trích Tức nước vỡ bờ.\n2. Năng lực: Phát triển năng lực tự học, giao tiếp và hợp tác.\n3. Phẩm chất: Nhân ái, đồng cảm với người lao động.\nII. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU: SGK, máy chiếu, phiếu học tập.\nIII. TIẾN TRÌNH DẠY HỌC\nHoạt động 1: Mở đầu\nHoạt động 2: Hình thành kiến thức\nHoạt động 3: Luyện tập\nHoạt động 4: Vận dụng";
+        document.getElementById('aiReviewInput').value = text;
+      }
+      const btn = document.getElementById('btnAiReview');
+      btn.disabled = true;
+      btn.textContent = '⏳ Đang thẩm định...';
+      const cfg = getCheckConfig();
+
+      const resp = await fetch('/api/pedagogy-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, config: cfg })
+      });
+      const r = await resp.json();
+      btn.disabled = false;
+      btn.textContent = '✨ Phân tích Sư phạm CV 5512';
+
+      const recs = (r.recommendations || []).map(x => `<li style="margin-bottom:0.35rem;">${escapeHtml(x)}</li>`).join('');
+      document.getElementById('aiReviewResult').innerHTML = `
+        <div style="padding:1.15rem; border-radius:12px; border:1px solid var(--border-color); background:var(--bg-subtle);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.65rem;">
+            <strong>🏆 Kết quả Thẩm định Sư phạm (${escapeHtml(r.mode || 'CV 5512')})</strong>
+            <span class="badge-pill">Điểm cấu trúc sư phạm: ${r.score}/100</span>
+          </div>
+          <p style="margin-bottom:0.5rem;"><strong>📌 Tổng quan:</strong> ${escapeHtml(r.summary || '')}</p>
+          <p style="margin-bottom:0.5rem;"><strong>🎯 Đánh giá Mục tiêu (I):</strong> ${escapeHtml(r.objectives_review || '')}</p>
+          <p style="margin-bottom:0.5rem;"><strong>🔄 Đánh giá Tiến trình 4 hoạt động (III):</strong> ${escapeHtml(r.activities_review || '')}</p>
+          <p style="margin-bottom:0.5rem;"><strong>✍️ Văn phong & Thuật ngữ:</strong> ${escapeHtml(r.style_and_language || '')}</p>
+          <div style="margin-top:0.75rem;">
+            <strong>💡 Khuyến nghị nâng cấp giáo án:</strong>
+            <ul style="padding-left:1.25rem; margin-top:0.35rem; font-size:0.86rem;">${recs}</ul>
+          </div>
+        </div>
+      `;
+    }
+
+    // TAB 4: CUSTOM WHITELIST & CONFUSABLES
+    async function loadCustomDictAndConfusables() {
+      const resp = await fetch('/api/custom-whitelist');
+      const data = await resp.json();
+      renderCustomWordsBadges(data.custom_words || []);
+      CONFUSABLES_CACHE = data.confusables || [];
+      renderConfusablesTable('');
+    }
+
+    function renderCustomWordsBadges(words) {
+      const box = document.getElementById('customWordsList');
+      if (!words.length) {
+        box.innerHTML = `<span style="font-size:0.83rem; color:var(--text-muted);">Chưa có từ cá nhân nào. Hãy thêm từ ở ô bên trên.</span>`;
+        return;
+      }
+      box.innerHTML = words.map(w => `
+        <span class="badge-pill" style="padding: 0.35rem 0.75rem; font-size:0.82rem;">
+          ${escapeHtml(w)}
+          <span style="cursor:pointer; margin-left:0.35rem; color:var(--danger);" onclick="removeCustomWordUI('${escapeHtml(w)}')" title="Xóa">✕</span>
+        </span>
+      `).join('');
+    }
+
+    async function addCustomWordsUI() {
+      const inp = document.getElementById('newCustomWords');
+      const raw = inp.value.trim();
+      if (!raw) return;
+      const words = raw.split(',').map(s => s.trim()).filter(Boolean);
+      const resp = await fetch('/api/custom-whitelist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'add', words })
+      });
+      const data = await resp.json();
+      inp.value = '';
+      renderCustomWordsBadges(data.custom_words || []);
+    }
+
+    async function removeCustomWordUI(word) {
+      const resp = await fetch('/api/custom-whitelist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'remove', word })
+      });
+      const data = await resp.json();
+      renderCustomWordsBadges(data.custom_words || []);
+    }
+
+    function renderConfusablesTable(q) {
+      const query = (q || '').toLowerCase();
+      const filtered = CONFUSABLES_CACHE.filter(item =>
+        item.wrong.toLowerCase().includes(query) ||
+        item.right.toLowerCase().includes(query) ||
+        item.explanation.toLowerCase().includes(query)
+      );
+      const rows = filtered.map((item, idx) => `
+        <tr>
+          <td>${idx + 1}</td>
+          <td><span class="err-inline">${escapeHtml(item.wrong)}</span></td>
+          <td><span class="sug-inline">➜ ${escapeHtml(item.right)}</span></td>
+          <td>${escapeHtml(item.explanation)}</td>
+        </tr>
+      `).join('');
+      document.getElementById('confusablesTableContainer').innerHTML = `
+        <table class="err-table">
+          <thead><tr><th>#</th><th>Cách viết SAI thường gặp</th><th>Cách viết ĐÚNG chuẩn</th><th>Giải thích quy tắc chính tả / ngữ nghĩa</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+
+    function formatVisibleToken(token) {
+      if (!token) return '';
+      if (token.trim() === '') {
+        const n = token.length;
+        return n === 1 ? '␣ (1 dấu cách)' : `${'␣'.repeat(Math.min(n, 4))} (${n} dấu cách)`;
+      }
+      if (token.startsWith(' ') || token.endsWith(' ')) {
+        return token.replace(/ /g, '␣');
+      }
+      return token;
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadCustomDictAndConfusables();
+    });
+  </script>
+</body>
+</html>
